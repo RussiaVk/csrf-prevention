@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="model.classes.UserSession" table="sessions">
+      <meta attribute="class-description">
+	  This class contains the card session details.
+	</meta>
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="userId" type="int" column="user_id" />
+        <property name="session" type="string" column="session"/>
+        <property name="timestamp" type="long" column="timestamp"/>
+  </class>
+</hibernate-mapping>

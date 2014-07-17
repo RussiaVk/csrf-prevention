@@ -1,0 +1,31 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jul 14, 2014, 7:57:18 PM
+    Author     : ebrima
+*/
+
+div.center-block.main-login-container{
+    width:400px;
+}
+.main-login-container .tab-content{
+    border: 1px solid #dde;
+    padding: 20px;
+    margin-top: 5px;
+}
+
+.create-customer-form-container table td{
+    padding-top: 5px;
+    padding-right:5px; 
+}
+
+.bank-container-pane{
+border: 1px solid #ccc;
+border-top: none;
+padding:10px;
+padding-left: 20px;
+padding-right: 20px;
+}
