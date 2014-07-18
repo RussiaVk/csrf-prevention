@@ -13,8 +13,12 @@ import java.security.Security;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.servlet.ServletException;
@@ -73,16 +77,16 @@ public class AtmWithdraw extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        System.out.println("enter enter jud ja di da");
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+
         HttpSession session = request.getSession();
         Card currentCard = (Card)session.getAttribute("current_card");
         if ( currentCard != null){
             
             int WAmount = Integer.parseInt(request.getParameter("WAmount"));
           
-            //check accout have more money than user request
-        
+            //check accout have more money than user request        
             double AAmount = AtmActions.getAmountfromCustomerID(currentCard.getCustomerId());
 
             //System.out.println("AAmount = "+AAmount);
@@ -103,12 +107,14 @@ public class AtmWithdraw extends HttpServlet {
             }
             
             //update table account  //create new transaction and insert
-            if(!AtmActions.debitAccount(currentCard.getCustomerId(), WAmount)) {
+             Account account = AtmActions.getAccountFromCardID(currentCard.getId());
+             if(!AtmActions.debitAccount(account.getId(), WAmount) && account != null) 
+             {
                 request.setAttribute("InvalidMessage", "There are a problem<br>When do the transaction");
                 request.getRequestDispatcher("/WEB-INF/view/atm/AtmWithdrawInvalid.jsp").forward(request, response);
                 return;
-            }
-            
+             }
+ 
             //send email
             try {
                 String recipientEmail = currentCard.getCustomer().getEmail();
@@ -144,8 +150,11 @@ public class AtmWithdraw extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/view/atm/AtmWithdrawValid.jsp").forward(request, response);
         }
         else {
-            request.setAttribute("InvalidMessage", "Card Not Found");
-            request.getRequestDispatcher("/WEB-INF/view/atm/AtmWithdrawInvalid.jsp").forward(request, response);
+            //request.setAttribute("InvalidMessage", "Card Not Found");
+            //request.getRequestDispatcher("/WEB-INF/view/atm/AtmWithdrawInvalid.jsp").forward(request, response);      
+              response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+              out.println("Your session is expired");
+              out.close();
         }
     }
 

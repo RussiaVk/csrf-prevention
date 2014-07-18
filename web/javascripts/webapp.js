@@ -1,5 +1,10 @@
 
 jQuery( document ).ready(function( $ ) {
+    
+  function loadScript(){
+        $.getScript("javascripts/webapp.js");
+  }
+  
   function submitForm(formId,elementId, callBack, errorCallback){    
          $(formId ).submit(function( event ) {
                 event.preventDefault();
@@ -16,8 +21,7 @@ jQuery( document ).ready(function( $ ) {
                            callBack.apply();
                            $( elementId ).html( data );
                            //load script
-                           $.getScript("javascripts/webapp.js");
-                          
+                           loadScript();
                          },
                          error:function(error){
                              console.log(error);
@@ -34,7 +38,7 @@ jQuery( document ).ready(function( $ ) {
      var url = "bank/createcustomer";
       $.get( url, function( data ) {
           $( "#bankAccountsBank" ).html( data );
-         // $.getScript("javascripts/webapp.js");
+           loadScript();
         });
     });
     
@@ -43,7 +47,7 @@ jQuery( document ).ready(function( $ ) {
      var url = "bank/createuser";
       $.get( url, function( data ) {
           $( "#bankUsers" ).html( data );
-         // $.getScript("javascripts/webapp.js");
+           loadScript();
         });
     });
     
@@ -62,6 +66,7 @@ jQuery( document ).ready(function( $ ) {
                     data: $form.serialize(),
                     success: function (data) {
                       $( "#bankAccountsBank" ).html( data );
+                      loadScript();
                     },
                     error:function(error){
                      $( "#createCustomerErrorMsg" ).html( error );
@@ -76,7 +81,7 @@ jQuery( document ).ready(function( $ ) {
       var url = "bank?dest=account_list";
       $.get( url, function( data ) {
         $( "#bankAccountsBank" ).html( data );
-          $.getScript("javascripts/webapp.js");
+         loadScript();
         });
     });
     
@@ -94,6 +99,7 @@ jQuery( document ).ready(function( $ ) {
                     data: $form.serialize(),
                     success: function (data) {
                       $( "#bankUsers" ).html( data );
+                      loadScript();
                     },
                     error:function(error){
                         console.log(error);
@@ -108,7 +114,7 @@ jQuery( document ).ready(function( $ ) {
         var url = "bank?dest=user_list";
         $.get( url, function( data ) {
            $( "#bankUsers" ).html( data );
-            $.getScript("javascripts/webapp.js");
+           loadScript();
         });
     });
    /**
@@ -174,23 +180,6 @@ jQuery( document ).ready(function( $ ) {
         });    
     }
  
-    /*
-    $(".logout").click(function(event) {
-         event.preventDefault();
-         var url =  $(this).attr('href');
-         //$.load()
-         //$.get( url, function( data ) {
-           // $( "#atm-main-container" ).load(url);
-          //});
-          $.post(url,function(data,status){
-              //alert("Data: " + data + "\nStatus: " + status);
-            });
-            
-          return false; 
-    });
-    */
-   
-   
 //captacha
 if($("#atmRealPerson").length){
     $("#atmRealPerson").realperson({length: 5, hashName: 'realPersonHash',});

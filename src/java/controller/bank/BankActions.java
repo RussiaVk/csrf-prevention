@@ -24,6 +24,7 @@ import model.classes.User;
 import model.classes.UserRole;
 import model.classes.Withdraw;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -97,6 +98,26 @@ public class BankActions {
 			session.close();
 		}
 	}
+        
+        public static List<Transaction> listTransactions()
+	{
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			List transactions = session.createQuery("from Transaction").list();
+			transaction.commit();
+			return transactions;
+                        
+		} catch (HibernateException e) {
+			transaction.rollback();
+			e.printStackTrace();
+			return null;
+		} finally {
+			session.close();
+		}
+	}
+        
 	
 	public void updateCustomer(Long customerId, String courseName)
 	{
@@ -311,6 +332,48 @@ public class BankActions {
 			List users = session.createQuery("from User").list();
 			transaction.commit();
 			return users;
+                        
+		} catch (HibernateException e) {
+			transaction.rollback();
+			e.printStackTrace();
+			return null;
+		} finally {
+			session.close();
+		}
+	}
+       
+       public static List<UserRole> listUserRoles(int userId)
+	{
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			 Query query = session.createQuery("from UserRole Were userId = :userId ");
+                         query.setParameter("userId", userId);
+                         List<UserRole> roles= query.list();
+			return roles;
+                        //q.uniqueResult();
+                        
+		} catch (HibernateException e) {
+			transaction.rollback();
+			e.printStackTrace();
+			return null;
+		} finally {
+			session.close();
+		}
+	}
+       
+       public static UserRole isUserRoleAssigned(int userId, String roleName)
+	{
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			 Query query = session.createQuery("from UserRole where userId = :userid and role = :rolename");
+                         query.setParameter("userid", userId);
+                         query.setParameter("rolename", roleName);
+                         UserRole role = (UserRole)query.uniqueResult();
+			return role;
                         
 		} catch (HibernateException e) {
 			transaction.rollback();

@@ -13,6 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import model.classes.Card;
 
 /**
  *
@@ -32,19 +34,28 @@ public class AtmWithdrawConfirm extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String WAmount = request.getParameter("WAmount");
-        
-        System.out.println("WAmount = "+ WAmount);
-        
-        if(Integer.parseInt(WAmount)>0 && Integer.parseInt(WAmount)<=1000){
-            request.setAttribute("WAmount", WAmount);
-            request.getRequestDispatcher("/WEB-INF/view/atm/AtmWithdrawConfirm.jsp").forward(request, response);
-        }
-        else{
-            request.setAttribute("InvalidMessage", "You Can not withdraw the money more that 1000$ per day");
-            request.getRequestDispatcher("/WEB-INF/view/atm/AtmWithdrawInvalid.jsp").forward(request, response);
-        }
+            PrintWriter out = response.getWriter();
+
+            HttpSession session = request.getSession();
+            Card currentCard = (Card)session.getAttribute("current_card");
+            if(currentCard != null){
+                String WAmount = request.getParameter("WAmount");
+                System.out.println("WAmount = "+ WAmount);
+
+                if(Integer.parseInt(WAmount)>0 && Integer.parseInt(WAmount)<=1000){
+                    request.setAttribute("WAmount", WAmount);
+                    request.getRequestDispatcher("/WEB-INF/view/atm/AtmWithdrawConfirm.jsp").forward(request, response);
+                }
+                else{
+                    request.setAttribute("InvalidMessage", "You Can not withdraw the money more that 1000$ per day");
+                    request.getRequestDispatcher("/WEB-INF/view/atm/AtmWithdrawInvalid.jsp").forward(request, response);
+                }
+            }
+            else{
+              response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+              out.println("Your session is expired");
+              out.close();
+            }
  
     }
 

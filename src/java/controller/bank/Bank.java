@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.classes.User;
+import model.classes.UserRole;
 
 /**
  *
@@ -41,14 +42,28 @@ public class Bank extends HttpServlet {
            User currentUser = (User)session.getAttribute("current_user");
            if ( currentUser != null){
               List accounts = BankActions.listAccounts();
-              List users = BankActions.listUsers();
+             
+              List transactions = BankActions.listTransactions();
+             
               if (accounts != null){
                   request.setAttribute("accounts",accounts);
-                }
-              if (users != null){
-                  request.setAttribute("users",users);
+                }           
+              
+              if (transactions != null){
+                  System.out.println(transactions.toString());
+                  request.setAttribute("transactions",transactions);
                 }
              
+               //get user role and assigned it 
+               UserRole role =  BankActions.isUserRoleAssigned(currentUser.getId(),"administrator");
+
+               if(role != null){
+                   List users = BankActions.listUsers();
+                   if (users != null){
+                       request.setAttribute("users",users);
+                    }
+                   session.setAttribute("admin_role",role);
+               }
               //account_list
                String distination = request.getParameter("dest");
                if(distination != null){

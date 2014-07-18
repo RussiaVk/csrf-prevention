@@ -11,23 +11,23 @@ package model.classes;
  * @author ebrima
  */
 public class Withdraw extends Transaction {
-    private int cardId; 
+    private Integer cardId; 
     
     public Withdraw(){
     
     }
     
-    public Withdraw(int accountNo, int cardId, double amount) {
-        super(accountNo,amount,"Withdraw");
+    public Withdraw(int accountNo, Integer cardId, double amount) {
+        super(accountNo,amount,"WITHDRAW");
         this.cardId = cardId;
     }
       
-    public int getCardId(){
+    public Integer getCardId(){
      return cardId;
     }
     
     
-    public void setCardId(int cardId){
+    public void setCardId(Integer cardId){
       this.cardId = cardId;
     }
 }

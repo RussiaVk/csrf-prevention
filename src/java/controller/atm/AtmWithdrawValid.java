@@ -13,6 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import model.classes.Card;
 
 /**
  *
@@ -32,7 +34,17 @@ public class AtmWithdrawValid extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       request.getRequestDispatcher("/WEB-INF/view/atm/AtmWithdrawValid.jsp").forward(request, response);
+              PrintWriter out = response.getWriter();
+              HttpSession session = request.getSession();
+              Card currentCard = (Card)session.getAttribute("current_card");
+              if(currentCard != null){
+                 request.getRequestDispatcher("/WEB-INF/view/atm/AtmWithdrawValid.jsp").forward(request, response);
+              }
+              else{
+                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                 out.println("Your session is expired");
+                 out.close();
+              }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

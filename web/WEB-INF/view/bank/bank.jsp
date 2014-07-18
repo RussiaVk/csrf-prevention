@@ -1,7 +1,9 @@
 
+<%@page import="model.classes.UserRole"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.classes.User"%>
 <% User currentUser = (User)session.getAttribute("current_user") ;%>
+<% UserRole adminRole = (UserRole)session.getAttribute("admin_role"); %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,7 +24,12 @@
                     <h3>Welcome to the Bank Account page</h3>
                   </div>
                     <div style="display: inline-block; position: absolute; right: 20px; top: 20%;">
-                        <span><%= currentUser.getFirstName() %></span>
+                        <span><%= currentUser.getFirstName() %>
+                          <% if(adminRole != null){ %>
+                            (<%= adminRole.getRole() %>)
+                         <% } %>
+                        
+                        </span>
                         <form action="logout" method="post" role="form">
                                  <button type="submit" class="btn btn-primary">Logout</button><br>
                          </form>
@@ -31,19 +38,23 @@
         <div style="width: 80%; margin: 10px auto auto;" >
                 <ul class="nav nav-tabs nav-justified" role="tablist">
                     <li class="active"><a href="#bankAccountsBank" role="tab" data-toggle="tab">Accounts</a></li>
-                    <li><a href="#transactions" role="tab" data-toggle="tab">Transactions</a></li>
-                    <li><a href="#bankUsers" role="tab" data-toggle="tab">Users</a></li>
+                    <li><a href="#transactionsList" role="tab" data-toggle="tab">Transactions</a></li>
+                     <% if(adminRole != null){ %>
+                         <li><a href="#bankUsers" role="tab" data-toggle="tab">Users</a></li>
+                      <% } %>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active bank-container-pane" id="bankAccountsBank">
                          <%@include file="account_list.jsp" %>
                     </div>
-                    <div class="tab-pane bank-container-pane" id="transactions">
-                         Transactions
+                    <div class="tab-pane bank-container-pane" id="transactionsList">
+                         <%@include file="transaction_list.jsp" %>
                     </div>
+                  <% if(adminRole != null){ %>
                     <div class="tab-pane bank-container-pane" id="bankUsers">
                           <%@include file="user_list.jsp" %>
                     </div>
+                   <% } %>
                </div> 
         </div>
         </div>

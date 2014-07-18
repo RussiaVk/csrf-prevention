@@ -56,6 +56,10 @@
         <servlet-name>Logout</servlet-name>
         <servlet-class>common.Logout</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BankTransactions</servlet-name>
+        <servlet-class>controller.bank.BankTransactions</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>bank</servlet-name>
         <url-pattern>/bank</url-pattern>
@@ -100,7 +104,6 @@
         <servlet-name>AtmWithdrawValid</servlet-name>
         <url-pattern>/atm/withdrawvalid</url-pattern>
     </servlet-mapping>
-    
     <servlet-mapping>
         <servlet-name>AtmLogout</servlet-name>
         <url-pattern>/atm/logout</url-pattern>
@@ -112,6 +115,10 @@
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BankTransactions</servlet-name>
+        <url-pattern>/bank/transactions</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

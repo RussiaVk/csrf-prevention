@@ -19,6 +19,7 @@ public class Transaction implements Serializable{
     protected double amount;
     protected Date date;
     private String type;
+    private Account account;
     
     public Transaction(){
     
@@ -67,5 +68,13 @@ public class Transaction implements Serializable{
     
     public void setType(String type){
       this.type = type;
+    }
+    
+    public Account getAccount(){
+      return account;
+    }
+    
+    public void setAccount(Account account){
+      this.account  = account;
     }
 }

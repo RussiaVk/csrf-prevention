@@ -14,21 +14,21 @@ import model.classes.Transaction;
  */
  
 public class Deposit extends Transaction {
-    private int userId;
+    private Integer userId;
     
     public Deposit(){
        super();
     }
-    public Deposit(int accountNo, double amount,int userId) {
-        super(accountNo,amount, "Deposit");
+    public Deposit(int accountNo, double amount,Integer userId) {
+        super(accountNo,amount, "DEPOSIT");
         this.userId = userId;
     }
     
-    public int getUserId(){
+    public Integer getUserId(){
       return userId;
     }
     
-    public void setUserId(int userId){
+    public void setUserId(Integer userId){
       this.userId  = userId;
     }
     

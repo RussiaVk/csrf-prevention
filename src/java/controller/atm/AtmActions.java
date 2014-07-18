@@ -151,13 +151,11 @@ public class AtmActions {
             Query query = session.createQuery("from Account where cardId = :cardId ");
             query.setParameter("cardId", cardId);
             List<Account> list = query.list();
-           
-            
+                    
             if( list == null ) 
-                return null;
-            
+                return null;          
             else
-               list.get(0);
+               return list.get(0);
             
 	} catch (HibernateException e) {
             transaction.rollback();

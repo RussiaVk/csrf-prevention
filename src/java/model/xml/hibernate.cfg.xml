@@ -17,5 +17,6 @@
     <mapping resource="model/xml/deposit.hbm.xml"/>
     <mapping resource="model/xml/cardsession.hbm.xml"/>
     <mapping resource="model/xml/usersession.hbm.xml"/>
+    <mapping resource="model/xml/transaction.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>
