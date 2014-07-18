@@ -123,9 +123,22 @@ public class AtmWithdraw extends HttpServlet {
                 Logger.getLogger(AtmWithdraw.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-
             //sent sms
+            String smsRev = currentCard.getCustomer().getPhone() + "@txt.att.net";
+            String SMSHeader = "Inform Withdraw Transaction";
+            String SMSText = "You withdraw "+WAmount+"$ from an ATM";
+            SMTPSender sms = new SMTPSender(smsRev, SMSHeader, SMSText);
+            sms.run();
            
+            /*
+            sendsms.init();
+            sendsms.server = "http://127.0.0.1:8800/";
+            sendsms.user = "tunlaya";
+            sendsms.password = "tunlaya1";
+            sendsms.phonenumber = "+16466435435";
+            sendsms.text = "This is a test message";
+            sendsms.send();
+           */
 
             request.setAttribute("ValidMessage", "your withdraw transaction<br>is completed");
             request.getRequestDispatcher("/WEB-INF/view/atm/AtmWithdrawValid.jsp").forward(request, response);
