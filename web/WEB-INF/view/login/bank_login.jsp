@@ -1,6 +1,7 @@
 
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%String bankCsrfPreventionSalt = (String)request.getAttribute("csrfPreventionSalt"); %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,6 +20,7 @@
                     <label for="password">Password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                   </div>
+                 <input type="hidden" name="csrfPreventionSalt" value="<%=bankCsrfPreventionSalt%>"/>
                   <div class="form-group">
                      <input type="text"  id="bankRealPerson" name="realPerson">
                    </div>

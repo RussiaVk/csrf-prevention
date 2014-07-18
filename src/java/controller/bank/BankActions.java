@@ -67,7 +67,7 @@ public class BankActions {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			List customers = session.createQuery("from Customer").list();
+			List customers = session.createQuery("from Customer ORDER BY id DESC").list();
 			transaction.commit();
 			return customers;
                         
@@ -86,7 +86,7 @@ public class BankActions {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			List accounts = session.createQuery("from Account").list();
+			List accounts = session.createQuery("from Account ORDER BY dateCreated DESC").list();
 			transaction.commit();
 			return accounts;
                         
@@ -105,7 +105,7 @@ public class BankActions {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			List transactions = session.createQuery("from Transaction").list();
+			List transactions = session.createQuery("from Transaction ORDER BY id DESC").list();
 			transaction.commit();
 			return transactions;
                         
@@ -200,6 +200,7 @@ public class BankActions {
                         //set the cardId for the account
                         Account account = (Account) session.get(Account.class, accountId);
 			account.setCardId(cardId);
+                        session.update(account);
                         transaction.commit();
                         save = true;
 		} catch (HibernateException e) {
@@ -226,7 +227,7 @@ public class BankActions {
                         if(account != null ){                      
 			   Withdraw withdraw = new Withdraw(account.getId(), account.getCustomerId(), amount);
 			   //customer.setCourseName(courseName);
-			   session.save(account);
+			   session.update(account);
                            account.setAmount(account.getAmount() - withdraw.getAmount());
                            //update account after withdraw
 			   transaction.commit();
@@ -264,7 +265,7 @@ public class BankActions {
                            session.save(deposit);
                            account.setAmount(account.getAmount() + deposit.getAmount());
                            //update account after deposit
-                           session.save(account);
+                           session.update(account);
 			   transaction.commit();
                            save = true;
                         }

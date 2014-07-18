@@ -11,6 +11,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
   <% List accounts = (List)request.getAttribute("accounts"); 
+   String bankAccountsCsrfPreventionSalt = (String)request.getAttribute("csrfPreventionSalt");
   %>
  <div>
   <ul class="nav nav-pills">
@@ -55,6 +56,7 @@
                              <span>Deposit</span>
                               Amount: <input type="text" name="depositAmount"/><br/> 
                               <input type="hidden" name="accountId" value="<%= account.getId()%>" /> <br />
+                              <input type="hidden" name="csrfPreventionSalt" value="<%=bankAccountsCsrfPreventionSalt%>"/>
                              <button class="btn btn-primary  btn-sm close-popover">Cancel</button>
                              <button class="btn btn-primary  btn-sm submit-form-popover"type="submit" >Save</button>
                             </form>'

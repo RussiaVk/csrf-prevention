@@ -3,7 +3,7 @@
     Created on : Jul 14, 2014, 2:15:54 PM
     Author     : fara1_000
 --%>
-
+<%String bankCsrfPreventionSalt = (String)request.getAttribute("csrfPreventionSalt"); %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,7 +13,6 @@
         <link href="vendor/bootstrap-3.1.1/dist/css/bootstrap.min.css" rel="stylesheet" media="screen"> 
         <script src="vendor/jquery/jquery-1.11.1.min.js"></script>
         <script src="vendor/bootstrap-3.1.1/dist/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="javascripts/webapp.js"></script>
         <title>Create New User</title>
     </head>
     <body>
@@ -34,6 +33,7 @@
                     </table>
                 </fieldset>
                 <table>
+                <input type="hidden" name="csrfPreventionSalt" value="<%=bankCsrfPreventionSalt%>"/>
                 <tr><td><button type="submit" class="btn btn-primary">Save</button></td>
                 <td><button type="button" class="btn btn-primary" id="closeUserForm">Cancel</button></td></tr>
                 </table>

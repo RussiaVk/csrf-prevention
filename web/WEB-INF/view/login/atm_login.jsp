@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%String atmCsrfPreventionSalt = (String)request.getAttribute("csrfPreventionSalt"); %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -23,6 +24,7 @@
                 <label for="pin-code">Pin code</label>
                 <input type="password" class="form-control" id="pin-code" name="pinCode" placeholder="Pin code">
               </div>
+                <input type="hidden" name="csrfPreventionSalt" value="<%=atmCsrfPreventionSalt%>"/>
               <div class="form-group">
                 <input type="text"  id="atmRealPerson" name="atmRealPerson">
               </div>
