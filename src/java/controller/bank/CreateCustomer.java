@@ -147,7 +147,7 @@ public class CreateCustomer extends HttpServlet {
     }
      public boolean validatePhone(String phone)  {        
         Boolean b=false;      
-            String phonereg = "\\d{10}$";
+            String phonereg = "[\\d]{10}$";
             b = phone.matches(phonereg);   
             System.out.println(b);
       
@@ -155,7 +155,7 @@ public class CreateCustomer extends HttpServlet {
     }
      public boolean validateOpenningAmount(String amount)  {        
         Boolean b=false;      
-            String amountreg = "\\d";
+            String amountreg = "[\\d]+$";
             b = amount.matches(amountreg);   
             System.out.println(b);
       
