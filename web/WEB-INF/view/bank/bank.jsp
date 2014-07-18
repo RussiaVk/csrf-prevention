@@ -11,6 +11,7 @@
         <script type="text/javascript" src="vendor/jquery/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="vendor/bootstrap-3.1.1/dist/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="vendor/bootstrap-3.1.1/js/tab.js"></script>
+        <script type="text/javascript" src="vendor/bootstrap-3.1.1/js/popover.js"></script>
         <script type="text/javascript" src="javascripts/webapp.js"></script>
         <title>Bank Account Page</title>
     </head>

@@ -1,6 +1,6 @@
 
 jQuery( document ).ready(function( $ ) {
-  function submitForm(formId,elementId){    
+  function submitForm(formId,elementId, callBack, errorCallback){    
          $(formId ).submit(function( event ) {
                 event.preventDefault();
                 var $form = $( this ),
@@ -13,13 +13,19 @@ jQuery( document ).ready(function( $ ) {
                          async: false,
                          data: $form.serialize(),
                          success: function (data) {
+                           callBack.apply();
                            $( elementId ).html( data );
+                           //load script
+                           $.getScript("javascripts/webapp.js");
+                          
                          },
                          error:function(error){
                              console.log(error);
+                             errorCallback.call(this,error);
                          }
                      });
          });
+       return false;
   }
   
   
@@ -75,12 +81,6 @@ jQuery( document ).ready(function( $ ) {
     });
     
      $("form#createUser" ).submit(function( event ) {
-      /*if ( $( "input:first" ).val() === "correct" ) {
-        $( "span" ).text( "Validated..." ).show();
-        return;
-        }
-        $( "span" ).text( "Not valid!" ).show().fadeOut( 1000 );
-        */
            event.preventDefault();
            var $form = $( this ),
             url = $form.attr( "action" );
@@ -199,4 +199,37 @@ if($("#atmRealPerson").length){
  if( $("#bankRealPerson").length){
      $("#bankRealPerson").realperson({length: 5, hashName: 'realPersonHash',});}
 
+//popover
+ $('.inline-deposit_button').click(function () {
+        $(this).popover({
+                html: true,
+                trigger: 'manual',
+                placement: 'bottom',
+         }).popover('toggle');
+         
+         var _this = this;
+         
+         function callbackPopOver(){
+               $(_this).popover('toggle');
+               return ;
+         }
+         
+         function errorCallback(error){
+             console.log("error callback");
+              console.log(error);
+             $("#inline-form-submit-message").html(error.responseText);
+         }
+         $('.close-popover').off('click').on('click', function() {
+             $(_this).popover('toggle');
+             return false;
+         });
+         //
+         submitForm(".deposit-inline-form","#bankAccountsBank",callbackPopOver,errorCallback);
+        
+           /*$('.submit-form-popover').off('click').on('click', function() {
+             $(_this).popover('toggle');
+             return false;
+         });
+         */
+    });
 });

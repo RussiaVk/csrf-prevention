@@ -13,13 +13,14 @@
         </div>
         <div style="margin-top:10px;">
             <table class="table table-striped table-hover">
-                <tr><th>First Name</th><th>Last Name</th><th>User Name</th></tr>
+                <tr><th></th><th>First Name</th><th>Last Name</th><th>User Name</th></tr>
              <%
               if  (users != null ){
                   for (Iterator iterator = users.iterator(); iterator.hasNext();) {
                     User user = (User) iterator.next();  
                %>
                 <tr>
+                    <td><input type="checkbox" name="id" value="<%=user.getId()%>" /></td>
                     <td> <%=user.getFirstName()%> </td>
                     <td> <%=user.getLastName()%> </td>
                     <td> <%=user.getUsername()%> </td>
