@@ -93,7 +93,7 @@ public class BankActions {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			List accounts = session.createQuery("from Account ORDER BY dateCreated DESC").list();
+			List accounts = session.createQuery("from Account ORDER BY id DESC").list();
 			transaction.commit();
 			return accounts;
                         
@@ -177,12 +177,12 @@ public class BankActions {
                         {
                           Card card = createAccountCard(customerId,accountId);
                        //  save = (card != null)? creditAccount(accountId,openningAmount,currentUserId) : save; 
-                          model.classes.Transaction deposit = creditNewAccount(accountId,openningAmount,currentUserId);
+                          Deposit deposit = creditNewAccount(accountId,openningAmount,currentUserId);
                          
                           save = (deposit != null);
                           //send email
-                          if(account!= null && save){
-                            notifyNewCustomer(account,deposit,card);
+                          if(save){
+                            notifyNewCustomer(deposit,card);
                           }
                         }
 
@@ -258,6 +258,7 @@ public class BankActions {
 		
 	}
          
+        
         //deposit into the account
         public static boolean creditAccount(int accountId,double amount,  int currentUserId)
 	{
@@ -439,57 +440,83 @@ public class BankActions {
 		}
 	}
        
-       private static void notifyNewCustomer(Account account,model.classes.Transaction deposit, Card card){
-       
-         try {
-                Customer customer = account.getCustomer();
-                String recipientEmail = customer.getEmail();
-                String CCrecipient ="";
-                String title =  "Inform on your new bank account";
-                String message = "Hi " + customer.getFirstName() + " " + customer.getLastName() + ",\n" +
-                                 "Thank your opening your new account\n. "+
-                                  "We would like to inform you that your latest deposit transaction was successful.\n" + 
-                                  "Your first deposit was $"+ deposit.getAmount()+ "on " + deposit.getDate().toString() +
-                                  "Your opening balance is $"+account.getAmount();
-                             
-                if(card != null){
-                 message += "You ATM details are:\n"+
-                           "Card Number:"+ card.getCardNo() + "\n"+
-                           "Pin code:" + card.getPinCode() +"\n";
-                
-                }
-                    
-                message  += "ThankYou\n\nHave a nice day!";
-                
-                sendEmail.Send(recipientEmail, CCrecipient, title, message);
-            } catch (MessagingException ex) {
-                Logger.getLogger(BankActions.class.getName()).log(Level.SEVERE, null, ex);
-            }
+         public static Account getAccountById(int accountId)
+	{
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		Account account = null;
+		try {
+			transaction = session.beginTransaction();
+                        account = (Account) session.get(Account.class, accountId);
+                          //update account after withdraw
+			 transaction.commit();
+  
+		} catch (HibernateException e) {
+			transaction.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return account;
+		
+	}
+         
+       private static void notifyNewCustomer(Deposit deposit, Card card){
+         Account account = getAccountById(deposit.getAccountId());
+         if(account != null){
+                try {
+                      //deposit.getAccount();
+                       Customer customer = account.getCustomer();
+                       String recipientEmail = customer.getEmail();
+                       String CCrecipient ="";
+                       String title =  "Inform on your new bank account";
+                       String message = "Hi " + customer.getFirstName() + " " + customer.getLastName() + ",\n" +
+                                        "Thank your opening your new account\n. "+
+                                         "We would like to inform you that your latest deposit transaction was successful.\n" + 
+                                         "Your first deposit was $"+ deposit.getAmount()+
+                                          //"on " + deposit.getDate().toString() +
+                                          "Your opening balance is $"+account.getAmount();
 
-            //sent sms
-            try{
-                Customer customer = account.getCustomer();
-                String smsRev = customer.getPhone() + "@txt.att.net";
-                String SMSHeader = "Inform Withdraw Transaction";
-                String message = "Hi " + customer.getFirstName() + " " + customer.getLastName() + ",\n" +
-                                 "Thank your opening your new account\n. "+
-                                  "We would like to inform you that your latest deposit transaction was successful.\n" + 
-                                  "Your first deposit was $"+ deposit.getAmount()+ "on " + deposit.getDate().toString() +
-                                  "Your opening balance is $"+account.getAmount();
-                             
-                if(card != null){
-                 message += "You ATM details are:\n"+
-                           "Card Number:"+ card.getCardNo() + "\n"+
-                           "Pin code:" + card.getPinCode() +"\n";
-                
-                }
-                    
-                message  += "ThankYou\n\nHave a nice day!";;
-                SMTPSender sms = new SMTPSender(smsRev, SMSHeader, message);
-                sms.run();
-            } catch (Exception ex) {
-                Logger.getLogger(BankActions.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                       if(card != null){
+                        message += "You ATM details are:\n"+
+                                  "Card Number:"+ card.getCardNo() + "\n"+
+                                  "Pin code:" + card.getPinCode() +"\n";
+
+                       }
+
+                       message  += "ThankYou\n\nHave a nice day!";
+
+                       sendEmail.Send(recipientEmail, CCrecipient, title, message);
+                   } catch (MessagingException ex) {
+                       Logger.getLogger(BankActions.class.getName()).log(Level.SEVERE, null, ex);
+                   }
+
+                   //sent sms
+                   try{
+                       Customer customer = account.getCustomer();
+                       String smsRev = customer.getPhone() + "@txt.att.net";
+                       String SMSHeader = "Inform Withdraw Transaction";
+                       String message = "Hi " + customer.getFirstName() + " " + customer.getLastName() + ",\n" +
+                                        "Thank your opening your new account\n. "+
+                                         "We would like to inform you that your latest deposit transaction was successful.\n" + 
+                                         "Your first deposit was $"+ deposit.getAmount()+
+                                        // "on " + deposit.getDate().toString() +
+                                         "Your opening balance is $"+account.getAmount();
+
+                       if(card != null){
+                        message += "You ATM details are:\n"+
+                                  "Card Number:"+ card.getCardNo() + "\n"+
+                                  "Pin code:" + card.getPinCode() +"\n";
+
+                       }
+
+                       message  += "ThankYou\n\nHave a nice day!";;
+                       SMTPSender sms = new SMTPSender(smsRev, SMSHeader, message);
+                       sms.run();
+                   } catch (Exception ex) {
+                       Logger.getLogger(BankActions.class.getName()).log(Level.SEVERE, null, ex);
+                   }
+         }
        }
        
 }

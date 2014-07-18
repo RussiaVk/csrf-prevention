@@ -121,6 +121,7 @@ public class Atm extends HttpServlet {
                 HttpSession session = SessionManager.getCardSession(currentCard.getId());
                 if(session != null){
                    session.invalidate();
+                   SessionManager.removeUserSession(currentCard.getId());
                  }
                 session = request.getSession();
                 session.setAttribute("current_card",currentCard);

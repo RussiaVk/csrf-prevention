@@ -8,10 +8,13 @@ package controller.bank;
 import common.Authenticate;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,26 +74,37 @@ public class CreateCustomer extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        //keep error messages
+        ArrayList<String> errors = new ArrayList<String>();
         //get the session
         HttpSession session = request.getSession();
         User currentUser = (User) session.getAttribute("current_user");
         if (currentUser != null) {
+            double openningAmount = 0;
             String firstName = request.getParameter("firstname");
             String lastName = request.getParameter("lastname");
             String address = request.getParameter("address");
             String email = request.getParameter("email");            
             String phone = request.getParameter("phone");
             String accountType = request.getParameter("accountType");
-            double openningAmount = Double.parseDouble(request.getParameter("openinngAmount"));
             boolean createAtmCard = Boolean.parseBoolean(request.getParameter("atmCard"));
 
             try {
-                if(!validateEmail(email)){                
-                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    out.println("Error Invaild Email Address");
-                    out.close();
+                if(validateOpenningAmount(request.getParameter("openinngAmount")))
+                {
+                 openningAmount = Double.parseDouble(request.getParameter("openinngAmount"));
                 }
-                else if (BankActions.createCustomer(firstName, lastName, address, email, phone, accountType, openningAmount, createAtmCard, currentUser.getId())) {
+                else
+                {
+                    errors.add("Invalid openning amount<br />\n");
+                }
+                
+                if(!validateEmail(email)){                
+                   // out.println("Invaild Email Address");
+                    errors.add("Invaild Email Address<br />\n");
+                }
+                
+                if ( errors.isEmpty() && BankActions.createCustomer(firstName, lastName, address, email, phone, accountType, openningAmount, createAtmCard, currentUser.getId())) {
                     List accounts = BankActions.listAccounts();
                     if (accounts != null) {
                         request.setAttribute("accounts", accounts);
@@ -99,13 +113,15 @@ public class CreateCustomer extends HttpServlet {
                     request.getRequestDispatcher("/WEB-INF/view/bank/account_list.jsp").include(request, response);
                 } else {
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    out.println("Error data not saved");
+                    out.println("Error data not saved<br/>");
+                    displayErrorMassage(out,errors);             
                     out.close();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                out.println("Error saving data");
+                out.println("Error saving data<br />");             
+                displayErrorMassage(out,errors);
                 out.close();
             }
 
@@ -144,5 +160,12 @@ public class CreateCustomer extends HttpServlet {
             System.out.println(b);
       
         return b;
+    }
+     
+    private void displayErrorMassage(PrintWriter out, ArrayList errors){
+       Iterator iter = errors.iterator();
+        while(iter.hasNext()){
+           out.println((String)iter.next());
+        }
     }
 }

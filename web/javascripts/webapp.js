@@ -69,7 +69,9 @@ jQuery( document ).ready(function( $ ) {
                       loadScript();
                     },
                     error:function(error){
-                     $( "#createCustomerErrorMsg" ).html( error );
+                      console.log(error);
+                      $("#createCustomerErrorMsg" ).html("<span style=\"color:red\">"+error.responseText +"</span>" );
+                       console.log(error.responseText );
                     }
                     
                 });

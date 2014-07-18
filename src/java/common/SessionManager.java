@@ -73,4 +73,14 @@ public class SessionManager {
       public static HttpSession getCardSession(int cardId){
           return (HttpSession)activeCardSessions.get(cardId);       
       }
+      
+      public static void removeCardSession(int cardId){
+            if(activeCardSessions.containsKey(cardId))
+               activeCardSessions.remove(cardId);
+      }
+      
+      public static void removeUserSession(int userId){
+            if(activeUserSessions.containsKey(userId))
+              activeUserSessions.remove(userId);
+      }
 }

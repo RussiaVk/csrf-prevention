@@ -163,6 +163,7 @@ public class Bank extends HttpServlet {
          session = SessionManager.getUserSession(currentUser.getId());
          if(session != null){
            session.invalidate();
+           SessionManager.removeUserSession(currentUser.getId());
           }
           session  = request.getSession();     
           session.setAttribute("current_user",currentUser);
