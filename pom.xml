@@ -6,25 +6,66 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>csrf-prevention</artifactId>
-	<packaging>pom</packaging>
+	<packaging>pom</packaging> 
 	<modules>
+		<module>csrf-prevention-api</module>
 		<module>csrf-prevention-load</module>
 		<module>csrf-prevention-validation</module>
-	</modules>
-	<dependencyManagement>
-		<dependencies>
-			<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+		
+	</modules> 
+		<dependencyManagement>
+		<dependencies>   
 			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-				<version>3.11</version>
+				<groupId>org.deking.component.management</groupId>
+				<artifactId>deking-dependency-management-slf4j</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency> 
+			<dependency>
+				<groupId>org.deking.component.management</groupId>
+				<artifactId>deking-dependency-management-swagger</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.deking.component.management</groupId>
+				<artifactId>deking-dependency-management-feign</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.deking.component.management</groupId>
+				<artifactId>deking-dependency-management-jackson</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency> 
+			<dependency>
+				<groupId>org.deking.component.management</groupId>
+				<artifactId>deking-dependency-management-validation</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency> 
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>4.0.1</version>
 				<scope>provided</scope>
 			</dependency>
-			<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+			<!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
 			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>30.1-jre</version>
+				<groupId>javax.ws.rs</groupId>
+				<artifactId>javax.ws.rs-api</artifactId>
+				<version>2.1.1</version>
+			</dependency> 
+			<dependency>
+				<groupId>javax.enterprise</groupId>
+				<artifactId>cdi-api</artifactId>
+				<version>2.0.SP1</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
